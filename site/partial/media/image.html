@@ -1,0 +1,19 @@
+<div class="col-md-12 media-item">
+    <div class="col-md-12 title"><a href="https://www.reddit.com{{item.permalink}}" target="_blank">{{ item.title }}</a></div>
+
+    <div class="col-md-12 image-media">
+        <div ng-click="openModal(item.url)" class="zoomCursor">
+            <img ng-src="{{item.url}}" class="img-responsive">
+        </div>
+    </div>
+
+    <div class="col-md-12 values">
+        <div class="text-center col-md-6 span"><span class="glyphicon glyphicon-heart" aria-hidden="true" style="color: whitesmoke;"></span>
+            <p>{{item.ups}}</p>
+        </div>
+        <div class="text-center col-md-6 span"><span class="glyphicon glyphicon-link" aria-hidden="true" style="color: whitesmoke;"></span>
+            <p><a href="https://www.reddit.com/{{item.subreddit_name_prefixed}}" target="_blank">{{item.subreddit_name_prefixed}}</a></p>
+        </div>
+    </div>
+</div>
+

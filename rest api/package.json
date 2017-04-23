@@ -1,0 +1,22 @@
+{
+  "name": "rest-api",
+  "version": "1.0.0",
+  "description": "Code from the video: [https://www.youtube.com/watch?v=p-x6WdwaJco](https://www.youtube.com/watch?v=p-x6WdwaJco)",
+  "main": "addAutoInc.js",
+  "dependencies": {
+    "async": "^2.1.5",
+    "mongoose": "^3.9.7",
+    "express": "^4.14.1",
+    "method-override": "^2.3.7",
+    "body-parser": "^1.16.0",
+    "node-restful": "^0.1.19",
+    "mongoose-paginate": "^5.0.3",
+    "morgan": "^1.8.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "site angular",
+  "homepage": "https://github.com/isak16/site",
+  "authors": [
+    "Isak Larsson <Isak454@hotmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "async": "^2.1.5",
+    "angular-material": "^1.1.3",
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.1",
+    "svg-assets-cache.js": "svg-assets-cache#*",
+    "request": "^2.81.1"
+  }
+}

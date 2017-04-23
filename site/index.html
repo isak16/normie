@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta name="viewport" charset="UTF-8" content="width=device-width, initial-scale=1">
+    <title>Normie.tv</title>
+    <meta name="description" content="Browse the most popular reddit posts on normie.tv. Never ending scroll with the most upvoted content. A built in filter removes the posts you've already seen. Add your own sources and fine tune your experience">
+    <meta name="keywords" content="reddit, memes, 4chan, funny, wow, xd, cx, normie, media, normie.tv, twitch, images, videos, norme">
+    <meta name="author" content="NastyBlunt">
+    <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.svg">
+    <link rel="stylesheet" href="scss/main.css">
+</head>
+
+<body ng-controller="mainflow" ng-cloak >
+
+<div class="modal fade"  id="enlargeImageModal" tabindex="-1" role="dialog" aria-labelledby="enlargeImageModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body" data-dismiss="modal">
+                <img src="" class="enlargeImageModalSource" style="width: 100%;">
+            </div>
+        </div>
+    </div>
+</div>
+<nav class="navbar navbar-inverse sidebar navbar-fixed-top" role="navigation">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <img src="images/logo.png" alt="">
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li style="color: whitesmoke;">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary" style="width: 100%; margin-top: 10px; border-radius: 0;" ng-click="setMainFlowBool();" data-toggle="tooltip" data-placement="bottom" title="A mix of the most popular posts.  A filter tracks already seen posts."  ng-class="display.mainflow ? 'active' : ''">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            Mainflow
+                        </label>
+                        <label class="btn btn-success" style="margin: 10px 5px; border-radius: 0;" ng-click="setDisplayVideoBool();"  ng-class="display.video ? 'active' : ''" data-toggle="tooltip" title="Toggle videos">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            Videos
+                        </label>
+                        <label class="btn btn-success" style="margin: 10px 5px; border-radius: 0;" ng-click="setDisplayImageBool();" ng-class="display.image ? 'active' : ''" data-toggle="tooltip" title="Toggle images">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            Images
+                        </label>
+                    </div>
+                </li>
+                <li>
+
+                </li>
+
+                <li style="color: whitesmoke;">
+                    <div style="padding: 10px 0;">
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon">r/</div>
+                        <input type="text" class="form-control" ng-model="input.source" placeholder="subreddit" ng-enter="addSrc();">
+                    </div>
+                    <button class="btn btn-primary active btn-md" ng-click="addSrc();" style="width: 100%;">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Add
+                    </button>
+                        <button class="btn btn-danger active btn-md" style="margin: 10px 5px; border-radius: 0;" ng-click="reset();" data-toggle="tooltip" title="Resets your filters and settings">
+                            <span class="glyphicon glyphicon-retweet"></span>
+                            Reset
+                        </button>
+                        <button class="btn btn-success active btn-md" style="margin: 10px 5px; border-radius: 0;" ng-click="getData();" data-toggle="tooltip" title="Refresh to load in newly added sources.">
+                            <span class="glyphicon glyphicon-refresh"></span>
+                            Refresh
+                        </button>
+
+
+                        <label class="btn btn-success" style="width: 100%; border-radius: 0;" ng-click="setDisplayFilterBool();" ng-class="display.filter ? 'active' : ''" data-toggle="tooltip"  title="Filter away already seen posts from reddit sources.">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            Filter reddit media
+                        </label>
+                    </div>
+                </li>
+                <li>
+
+                    <div class="list-group" ng-if="sourceArr.length != 0">
+                        <a href="#" class="list-group-item" ng-repeat="item in sourceArr" >r/{{item}}<span class="glyphicon glyphicon-remove" ng-click="removeItemReddit($index)"></span></a>
+                        <a href="#" class="list-group-item" ng-repeat="item in domainArr" ng-click="removeItemDomain($index)">domain/{{item}}</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+<div class="main">
+<div class="alert alert-danger alert-dismissable" ng-if="err.length > 0" ng-click="removeError();" ng-cloak>
+    <a href="#" class="close" aria-label="close" >&times;</a>
+    <strong>Error!</strong> {{err}}
+</div>
+
+<section class="col-md-7 col-md-offset-2 media-wrap">
+    <div ng-repeat="arrayItem in dataArr">
+        <div ng-repeat="item in arrayItem | filter: filterType | filter: filterMainflow | filter: filterReddit | filter: filterDomain | orderBy:'-ups'" class="media-box">
+               <youtube ng-if="dataType(item.type, item.domain) == 'youtube'"></youtube>
+                <imagemedia ng-if="dataType(item.type, item.domain) == 'image' && item.over_18 == nsfw"></imagemedia>
+                <twitch ng-if="dataType(item.type, item.domain) == 'twitch' && item.over_18 == nsfw"></twitch>
+                <gfycat ng-if="dataType(item.type, item.domain) == 'gfycat' && item.over_18 == nsfw"></gfycat>
+        </div>
+    </div>
+</section>
+</div>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-62655327-2', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="js/returnObjects.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/async/dist/async.js"></script>
+<script src="js/ngFilters.js"></script>
+<script src="js/localstorage.js"></script>
+<script src="js/globalVars.js"></script>
+<script src="js/typeChecker.js"></script>
+<script src="js/ngApp.js"></script>
+<script src="js/ngService.js"></script>
+<script src="js/directive.js"></script>
+</body>
+</html>

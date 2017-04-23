@@ -1,0 +1,23 @@
+<div class="col-md-12 media-item" ng-if="videoId(item.url)">
+    <div class="col-md-12 title"><a href="https://www.reddit.com{{item.permalink}}" target="_blank">{{ item.title }}</a></div>
+    <div class="embed-responsive embed-responsive-16by9 col-md-12" ng-click="play = !play">
+        <div ng-if="!play" >
+            <div class="play-button-outer">
+                <div class="play-button"></div>
+            </div>
+            <img ng-src="{{item.media.oembed.thumbnail_url}}" style="position: absolute" alt="Description" />
+        </div>
+        <div class="embed-responsive-item" ng-if="play">
+            <iframe ng-src="{{ videoId(item.url) }}" allowfullscreen="true"></iframe>
+        </div>
+    </div>
+
+    <div class="col-md-12 values">
+        <div class="text-center col-md-6 span"><span class="glyphicon glyphicon-heart" aria-hidden="true" style="color: whitesmoke;"></span>
+            <p>{{item.ups}}</p>
+        </div>
+        <div class="text-center col-md-6 span"><span class="glyphicon glyphicon-link" aria-hidden="true" style="color: whitesmoke;"></span>
+            <p><a href="https://www.reddit.com/{{item.subreddit_name_prefixed}}" target="_blank">{{item.subreddit_name_prefixed}}</a></p>
+        </div>
+    </div>
+</div>
